@@ -1,0 +1,48 @@
+-- local submode = require("submode")
+-- submode.setup()
+--
+-- submode.create("window", {
+--     mode = "n",
+--     enter = "w",
+--     leave = "w", -- this is optional
+-- })
+--
+-- submode.register("window", {
+--     lhs = "h",
+--     rhs = "<C-w>h",
+--     opt = {
+--         desc = "Go to the right window"
+--     }
+-- })
+--
+-- submode.register("window", {
+--     lhs = "j",
+--     rhs = "<C-w>j",
+--     opt = {
+--         desc = "Go to the down window"
+--     }
+-- })
+--
+-- submode.register("window", {
+--     lhs = "k",
+--     rhs = "<C-w>k",
+--     opt = {
+--         desc = "Go to the up window"
+--     }
+-- })
+--
+-- submode.register("window", {
+--     lhs = "l",
+--     rhs = "<C-w>l",
+--     opt = {
+--         desc = "Go to the left window"
+--     }
+-- })
+--
+-- submode.register("window", {
+--     lhs = "+",
+--     rhs = "<C-w>+",
+--     opt = {
+--         desc = "Increase height"
+--     }
+-- })

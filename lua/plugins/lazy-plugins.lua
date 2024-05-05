@@ -2,6 +2,7 @@ require('lazy').setup({
     { 'numToStr/Comment.nvim',             opts = {} }, --comments
     { 'lewis6991/gitsigns.nvim',           opts = {} }, --git signs
     { 'MyGitHubBlueberry/wise-delimiters', opts = {} },
+    { 'pogyomo/submode.nvim', config = true },
     require 'plugins/config/telescope',
     require 'plugins/config/which-key',
     require 'plugins/config/cmp',

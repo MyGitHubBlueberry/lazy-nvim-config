@@ -6,12 +6,12 @@ local signs = {
 }
 
 local diagnosti_config = {
-    virtual_text = false, -- was true
+    virtual_text = true, -- was true
     signs = {
         active = signs,
     },
-    underline = true,
-    severity_sort = true,
+    -- underline = true,
+    -- severity_sort = true,
     float = {
         focusable = false,
         --style = "minimal",

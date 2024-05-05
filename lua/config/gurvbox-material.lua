@@ -24,5 +24,6 @@ vim.g.gruvbox_material_float_style = 'bright' --bright and dim options availiabl
 vim.g.gruvbox_material_diagnostic_text_highlight = 1
 vim.g.gruvbox_material_diagnostic_line_highlight = 1
 vim.g.gruvbox_material_diagnostic_virtual_text = 'highlighted'
+
 vim.g.gruvbox_material_statusline_style = 'default'
 vim.g.gruvbox_material_better_performance = 1
