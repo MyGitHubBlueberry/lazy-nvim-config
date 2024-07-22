@@ -3,7 +3,7 @@ require('lazy').setup({
     { 'lewis6991/gitsigns.nvim',           opts = {} }, --git signs
     { 'Leviathenn/nvim-transparent',        opts = {
         enable = true,
-        extra_groups = "all",
+        extra_groups = {"all"},
         exclude = {
             "PmenuSel",
             "PmenuKindSel",
@@ -13,7 +13,6 @@ require('lazy').setup({
             "PmenuSbar",
             "PmenuThumb",
             "ModeMsg",
-            "DevIconOrgMode",
             "StatusLine",
             "StatusLineNC",
             "StatusLineTerm",
@@ -28,15 +27,6 @@ require('lazy').setup({
             "MiniStatuslineFilename",
             "MiniStatuslineFileinfo",
             "MiniStatuslineInactive",
-            "Visual",
-            "VisualNC",
-            "DiffAdd",
-            "DiffChange",
-            "DiffDelete",
-            "DiffText",
-            "ErrorMsg",
-            "Error",
-            "NvimInternalError",
         },
     }},
     require 'plugins/config/telescope',

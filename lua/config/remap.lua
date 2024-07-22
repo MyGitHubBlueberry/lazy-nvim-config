@@ -7,7 +7,8 @@ local n = "n";
 local v = "v";
 
 local function map(mode, lhs, rhs, desc, opts)
-    local options = { noremap = true, silent = true, desc = desc or "" }
+    local options = { noremap = true, silent = true }
+-- , desc = desc or "" 
     if opts then
         options = vim.tbl_extend('force', options, opts)
     end
@@ -69,7 +70,7 @@ M.map_lsp = function(event)
 
     loc_map('H', vim.lsp.buf.hover, '[H]over Documentation')
     loc_map('<leader>r', vim.lsp.buf.rename, '[R]ename')
-    loc_map('<leader>F', vim.lsp.buf.format, 'For[m]at current buffer')
+    loc_map('<leader>F', vim.lsp.buf.format, '[F]ormat current buffer')
     loc_map('<leader>a', vim.lsp.buf.code_action, 'Code [A]ction')
     -- loc_map('gt', builtin.lsp_type_definitions, '[G]o to [T]ype definition')
     loc_map('gi', builtin.lsp_implementations, '[G]o to [I]mplementation')
