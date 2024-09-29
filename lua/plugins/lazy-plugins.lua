@@ -1,6 +1,18 @@
 require('lazy').setup({
+    { 'gpanders/nvim-parinfer' }, --for yuck
+    { 'neodev.nvim' }, --for yuck
+    { "williamboman/mason.nvim" },
+    { "mfussenegger/nvim-dap" },
+    { "jay-babu/mason-nvim-dap.nvim",      opts = {} },
+    { "rcarriga/nvim-dap-ui",              dependencies = {
+        "mfussenegger/nvim-dap",
+        "nvim-neotest/nvim-nio",
+    } },
     { 'numToStr/Comment.nvim',             opts = {} }, --comments
     { 'lewis6991/gitsigns.nvim',           opts = {} }, --git signs
+    { 'brenoprata10/nvim-highlight-colors',       config = function()
+        require ('nvim-highlight-colors').setup({})
+    end },
     { 'Leviathenn/nvim-transparent',        opts = {
         enable = true,
         extra_groups = "all",

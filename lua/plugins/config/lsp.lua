@@ -40,7 +40,7 @@ return {
             local servers = {
                 clangd = {},
                 rust_analyzer = {},
-                tsserver = {},
+                pyright = {},
                 lua_ls = {
                     settings = {
                         Lua = {
@@ -56,28 +56,14 @@ return {
                 },
             }
 
-            require('mason').setup({})
+            for i, _ in pairs(servers) do
+                local server = servers[i] or {}
+                server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+                require('lspconfig')[i].setup(server)
+            end
 
-            local ensure_installed = vim.tbl_keys(servers or {})
-            vim.list_extend(ensure_installed, {
-                'stylua', -- Used to format Lua code
-                'clangd',
-                'rust_analyzer',
-            })
-            require('mason-tool-installer').setup { ensure_installed = ensure_installed }
-
-            require('mason-lspconfig').setup {
-                handlers = {
-                    function(server_name)
-                        local server = servers[server_name] or {}
-                        -- This handles overriding only values explicitly passed
-                        -- by the server configuration above. Useful when disabling
-                        -- certain features of an LSP (for example, turning off formatting for tsserver)
-                        server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-                        require('lspconfig')[server_name].setup(server)
-                    end,
-                },
-            }
+            require('mason').setup()
+            require('mason-nvim-dap').setup()
         end,
     },
 }

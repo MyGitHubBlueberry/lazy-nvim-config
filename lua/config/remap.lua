@@ -8,7 +8,7 @@ local v = "v";
 
 local function map(mode, lhs, rhs, desc, opts)
     local options = { noremap = true, silent = true }
--- , desc = desc or "" 
+    desc = desc or ""
     if opts then
         options = vim.tbl_extend('force', options, opts)
     end
@@ -89,9 +89,34 @@ M.map_lsp = function(event)
     loc_map('<leader>S', builtin.lsp_dynamic_workspace_symbols, 'Find Workspace [S]ymbols')
 end
 
+M.map_debugger = function()
+    local dap = require'dap'
+    map(n, "<leader>dp", function() dap.toggle_breakpoint() end, "Toggle break point")
+    map(n, "<leader>dc", function() dap.continue() end, "Start or continue the debugger")
+    map(n, "<leader>do", function() dap.step_over() end, "Step over in debugger")
+    map(n, "<leader>dO", function() dap.step_out() end, "Step over in debugger")
+    map(n, "<leader>di", function() dap.step_into() end, "Step into in debugger")
+    map(n, "<leader>dlp", function() dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end, "Set a break point with debug message")
+    map(n, "<leader>drp", function() dap.repl.open() end, "Open repl")
+    map(n_v, '<Leader>dh', function()
+      require('dap.ui.widgets').hover()
+    end, "Hover in debugger")
+    map(n_v, '<Leader>dp', function()
+      require('dap.ui.widgets').preview()
+    end, "Preview in depugger")
+    map(n, '<Leader>df', function()
+      local widgets = require('dap.ui.widgets')
+      widgets.centered_float(widgets.frames)
+    end, "Something to do with frames")
+    map(n, '<Leader>ds', function()
+      local widgets = require('dap.ui.widgets')
+      widgets.centered_float(widgets.scopes)
+    end, "Something to do with scopes")
+end
+
 M.normal_mode_cmp_remap = function()
-    local cmp = require 'cmp'
-    local luasnip = require 'luasnip'
+    -- local cmp = require 'cmp'
+    -- local luasnip = require 'luasnip'
     -- Following tab remap breaks <C-i> from work
     -- map(n, "<Tab>", function()
     --     if luasnip.expand_or_jumpable() then
