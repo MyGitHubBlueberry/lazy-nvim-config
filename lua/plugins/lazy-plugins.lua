@@ -3,7 +3,6 @@ require('lazy').setup({
     { 'neodev.nvim' }, --for yuck
     { "williamboman/mason.nvim" },
     { "mfussenegger/nvim-dap" },
-    { "jay-babu/mason-nvim-dap.nvim",      opts = {} },
     { "rcarriga/nvim-dap-ui",              dependencies = {
         "mfussenegger/nvim-dap",
         "nvim-neotest/nvim-nio",
@@ -58,6 +57,7 @@ require('lazy').setup({
     require 'plugins/config/mini',
     require 'plugins/config/treesitter',
     require 'plugins/config/harpoon',
+    require 'plugins/config/debugger',
     -- {
     --     'sainnhe/gruvbox-material',
     --     priority = 1000, -- Make sure to load this before all the other start plugins.

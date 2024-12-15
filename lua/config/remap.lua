@@ -7,8 +7,8 @@ local n = "n";
 local v = "v";
 
 local function map(mode, lhs, rhs, desc, opts)
-    local options = { noremap = true, silent = true }
-    desc = desc or ""
+    local options = { noremap = true, silent = true, desc = desc or "" }
+
     if opts then
         options = vim.tbl_extend('force', options, opts)
     end
@@ -46,8 +46,8 @@ map(n, ']d', vim.diagnostic.goto_next, 'Go to next [D]iagnostic message')
 map(n, '<leader>q', vim.diagnostic.setqflist, 'Open [Q]uick Fix List') -- :copen; add :cclose to togle
 map(n, 'gl', vim.diagnostic.open_float, '[G]o to f[L]oat window')
 --
-map(n, '<C-k>', function() vim.api.nvim_exec(":cprev", false) end, { desc = 'Open prev item in fix list' })
-map(n, '<C-j>', function() vim.api.nvim_exec(":cnext", false) end, { desc = 'Open next item in fix list' })
+map(n, '<C-k>', function() vim.api.nvim_exec(":cprev", false) end, 'Open prev item in fix list')
+map(n, '<C-j>', function() vim.api.nvim_exec(":cnext", false) end, 'Open next item in fix list')
 --
 M.map_telescope = function()
     local builtin = require 'telescope.builtin'
@@ -82,7 +82,7 @@ M.map_lsp = function(event)
 
     -- Fuzzy find all the symbols in your current document.
     --  Symbols are things like variables, functions, types, etc.
-    loc_map('<leader>s', builtin.lsp_document_symbols, 'Find Document [S]ymbols')
+    loc_map('<leader>s', builtin.lsp_document_symbols, 'Find Document [s]ymbols')
 
     -- Fuzzy find all the symbols in your current workspace.
     --  Similar to document symbols, except searches over your entire project.
@@ -91,27 +91,31 @@ end
 
 M.map_debugger = function()
     local dap = require'dap'
-    map(n, "<leader>dp", function() dap.toggle_breakpoint() end, "Toggle break point")
-    map(n, "<leader>dc", function() dap.continue() end, "Start or continue the debugger")
-    map(n, "<leader>do", function() dap.step_over() end, "Step over in debugger")
-    map(n, "<leader>dO", function() dap.step_out() end, "Step over in debugger")
-    map(n, "<leader>di", function() dap.step_into() end, "Step into in debugger")
-    map(n, "<leader>dlp", function() dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end, "Set a break point with debug message")
-    map(n, "<leader>drp", function() dap.repl.open() end, "Open repl")
-    map(n_v, '<Leader>dh', function()
-      require('dap.ui.widgets').hover()
-    end, "Hover in debugger")
-    map(n_v, '<Leader>dp', function()
-      require('dap.ui.widgets').preview()
-    end, "Preview in depugger")
-    map(n, '<Leader>df', function()
-      local widgets = require('dap.ui.widgets')
+    local loc_map = function(keys, func, desc)
+        vim.keymap.set(n_v, keys, func, { desc = 'Debugger: ' .. desc })
+    end
+
+    loc_map("<leader>dt", function() dap.toggle_breakpoint() end, "[t]oggle break point")
+    loc_map("<leader>dc", function() dap.continue() end, "Start or [c]ontinue")
+    loc_map("<leader>do", function() dap.step_over() end, "Step [o]ver")
+    loc_map("<leader>dO", function() dap.step_out() end, "Step [O]ut")
+    loc_map("<leader>di", function() dap.step_into() end, "Step [i]nto")
+    loc_map("<leader>dm", function() dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end, "Set a break point with [m]essage")
+    loc_map("<leader>dr", function() dap.repl.open() end, "Open [r]epl")
+    loc_map("<Leader>dh", function()
+      require("dap.ui.widgets").hover()
+    end, "[h]over")
+    loc_map("<Leader>dp", function()
+      require("dap.ui.widgets").preview()
+    end, "[p]review")
+    loc_map("<Leader>df", function()
+      local widgets = require("dap.ui.widgets")
       widgets.centered_float(widgets.frames)
-    end, "Something to do with frames")
-    map(n, '<Leader>ds', function()
-      local widgets = require('dap.ui.widgets')
+    end, "Something to do with [f]rames")
+    loc_map("<Leader>ds", function()
+      local widgets = require("dap.ui.widgets")
       widgets.centered_float(widgets.scopes)
-    end, "Something to do with scopes")
+    end, "Something to do with [s]copes")
 end
 
 M.normal_mode_cmp_remap = function()

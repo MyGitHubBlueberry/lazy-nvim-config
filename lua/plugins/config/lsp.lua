@@ -62,8 +62,8 @@ return {
                 require('lspconfig')[i].setup(server)
             end
 
-            require('mason').setup()
-            require('mason-nvim-dap').setup()
+            -- require('mason').setup()
+            -- require('mason-nvim-dap').setup()
         end,
     },
 }
