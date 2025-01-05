@@ -6,9 +6,9 @@ return {
       require('which-key').setup()
 
       -- Document existing key chains
-      require('which-key').register {
-        -- ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-      }
+      -- require('which-key').register {
+      --   -- ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
+      -- }
     end,
   },
 }

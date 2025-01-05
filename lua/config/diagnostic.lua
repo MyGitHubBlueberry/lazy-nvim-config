@@ -13,14 +13,26 @@ local diagnosti_config = {
     -- underline = true,
     -- severity_sort = true,
     float = {
-        focusable = false,
-        --style = "minimal",
+        focusable = true,
+        -- style = "minimal",
         source = "always",
-        --header = "",
-        --prefix = "",
-        --border = "rounded",
+        -- header = "",
+        -- prefix = "",
+        border = "single",
     },
 }
+
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+  vim.lsp.handlers.hover, {
+    border = "single"
+  }
+)
+
+vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+  vim.lsp.handlers.signature_help, {
+    border = "single"
+  }
+)
 
 vim.diagnostic.config(diagnosti_config)
 

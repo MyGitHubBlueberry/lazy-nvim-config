@@ -56,7 +56,18 @@ return {
                 }, {
                     { name = 'buffer' },
                 }),
----@diagnostic disable-next-line: missing-fields
+                window = {
+                    completion = { -- single border; thin-style scrollbar
+                        border = 'single',
+                        scrollbar = false, --'║',
+                        winhighlight = "Normal:FloatBorder,CursorLine:PmenuSel,Search:None",
+                    },
+                    documentation = { -- single border; native-style scrollbar
+                        border = 'single',
+                        scrollbar = false,
+                        -- other options
+                    },
+                },
                 formatting = {
                     fields = { "abbr", "menu", "kind" },
                     format = function(entry, item)

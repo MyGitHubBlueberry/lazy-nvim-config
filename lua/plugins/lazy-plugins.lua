@@ -16,6 +16,8 @@ require('lazy').setup({
         enable = true,
         extra_groups = "all",
         exclude = {
+            "Pmenu",
+            "CmpFloatScroll",
             "PmenuSel",
             "PmenuKindSel",
             "PmenuExtraSel",
@@ -23,6 +25,7 @@ require('lazy').setup({
             "PmenuExtra",
             "PmenuSbar",
             "PmenuThumb",
+            "Scrollbar",
             "ModeMsg",
             "DevIconOrgMode",
             "StatusLine",
