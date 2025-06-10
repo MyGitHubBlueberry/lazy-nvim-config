@@ -24,6 +24,8 @@ map(n_v, "<leader>e", function()
     end
 end, "Toggle [E]xplorer")
 
+map(n_v, "L", ":join<CR>", "Joins [L]ines with a space")
+
 map(v, "J", ":m '>+1<CR>gv=gv", "Move selected line of code down and indent")
 map(v, "K", ":m '<-2<CR>gv=gv", "Move selected line of code up and indent")
 
@@ -118,31 +120,9 @@ M.map_debugger = function()
     end, "Something to do with [s]copes")
 end
 
-M.normal_mode_cmp_remap = function()
-    -- local cmp = require 'cmp'
-    -- local luasnip = require 'luasnip'
-    -- Following tab remap breaks <C-i> from work
-    -- map(n, "<Tab>", function()
-    --     if luasnip.expand_or_jumpable() then
-    --         luasnip.expand_or_jump()
-    --     else
-    --         return "<Tab>"
-    --     end
-    -- end, "Behaves like <Tab> or goes to next snippet")
-    --
-    -- map(n, "<S-Tab>", function()
-    --     if luasnip.jumpable(-1) then
-    --         luasnip.jump(-1)
-    --     else
-    --         return "<S-Tab>"
-    --     end
-    -- end, "Behaves like <S-Tab> or goes to previous snippet")
-end
-
 M.map_cmp = function()
     local cmp = require 'cmp'
     local luasnip = require 'luasnip'
-    M.normal_mode_cmp_remap();
     return {
         ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
@@ -169,10 +149,15 @@ M.map_cmp = function()
 
         ['<CR>'] = cmp.mapping.confirm {
             behavior = cmp.ConfirmBehavior.Insert,
-            select = true
+            select = false
         },
-
-        -- ['<C-Space>'] = cmp.mapping.complete {},
+        ['<C-space>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.mapping.close()(fallback)
+            else
+                cmp.mapping.complete()(fallback)
+            end
+        end, { "i", "c" }),
     }
 end
 

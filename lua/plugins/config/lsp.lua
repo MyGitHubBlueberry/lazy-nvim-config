@@ -2,7 +2,6 @@ return {
     {
         'neovim/nvim-lspconfig',
         dependencies = {
-            -- Automatically install LSPs and related tools to stdpath for Neovim
             'williamboman/mason.nvim',
             'williamboman/mason-lspconfig.nvim',
             'WhoIsSethDaniel/mason-tool-installer.nvim',
@@ -21,7 +20,7 @@ return {
                     -- When you move your cursor, the highlights will be cleared (the second autocommand).
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
                     if client and client.server_capabilities.documentHighlightProvider then
-                        vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+                        vim.api.nvim_create_autocmd({ 'CursorHold' }, {
                             buffer = event.buf,
                             callback = vim.lsp.buf.document_highlight,
                         })
@@ -55,6 +54,8 @@ return {
                     },
                 },
                 bashls = {},
+                ts_ls = {},
+                csharp_ls ={},
             }
 
             for i, _ in pairs(servers) do

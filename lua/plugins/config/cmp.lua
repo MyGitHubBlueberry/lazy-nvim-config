@@ -46,7 +46,7 @@ return {
                         luasnip.lsp_expand(args.body)
                     end,
                 },
-                completion = { completeopt = 'menu,menuone,noinsert' },
+                completion = { completeopt = 'menu,menuone,noinsert,noselect' },
                 mapping = cmp.mapping.preset.insert(require('config.remap').map_cmp()),
                 sources = cmp.config.sources({
                     { name = 'nvim_lsp' },
@@ -86,7 +86,7 @@ return {
                         item.menu = menu_icon[entry.source.name]
 
                         -- Set the fixed width of the completion menu to 60 characters.
-                        -- fixed_width = 20
+                        local fixed_width = 20
 
                         -- Set 'fixed_width' to false if not provided.
                         fixed_width = fixed_width or false
