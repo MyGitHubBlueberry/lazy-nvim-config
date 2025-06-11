@@ -54,7 +54,7 @@ return {
                     },
                 },
                 bashls = {},
-                ts_ls = {},
+                -- ts_ls = {},
                 csharp_ls ={},
             }
 
