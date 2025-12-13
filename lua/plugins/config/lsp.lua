@@ -55,7 +55,8 @@ return {
                 },
                 bashls = {},
                 -- ts_ls = {},
-                csharp_ls ={},
+                csharp_ls = {},
+                sqls = {}
             }
 
             for i, _ in pairs(servers) do
