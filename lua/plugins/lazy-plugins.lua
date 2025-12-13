@@ -1,14 +1,5 @@
 require('lazy').setup({
-    { 'gpanders/nvim-parinfer' }, --for yuck
-    { 'neodev.nvim' }, --for yuck
-    { "williamboman/mason.nvim" },
-    { "mfussenegger/nvim-dap" },
-    { "rcarriga/nvim-dap-ui",              dependencies = {
-        "mfussenegger/nvim-dap",
-        "nvim-neotest/nvim-nio",
-    } },
-    { 'numToStr/Comment.nvim',             opts = {} }, --comments
-    { 'lewis6991/gitsigns.nvim',           opts = {} }, --git signs
+    { 'lewis6991/gitsigns.nvim',           opts = {} },
     { 'brenoprata10/nvim-highlight-colors',       config = function()
         require ('nvim-highlight-colors').setup({})
     end },
@@ -59,15 +50,6 @@ require('lazy').setup({
     require 'plugins/config/lsp',
     require 'plugins/config/mini',
     require 'plugins/config/treesitter',
-    require 'plugins/config/harpoon',
-    require 'plugins/config/debugger',
-    -- {
-    --     'sainnhe/gruvbox-material',
-    --     priority = 1000, -- Make sure to load this before all the other start plugins.
-    --     config = function()
-    --         vim.cmd.colorscheme('gruvbox-material')
-    --     end
-    -- },
     {
         'deviantfero/wpgtk.vim',
         priority = 1000, -- Make sure to load this before all the other start plugins.
@@ -77,4 +59,31 @@ require('lazy').setup({
     },
     'mbbill/undotree',
     'tpope/vim-fugitive',
+    -- --for yuck like in eww
+    -- { 'gpanders/nvim-parinfer' }, 
+    -- { 'neodev.nvim' }, 
+    -- -- for non declarative systems
+    -- { "williamboman/mason.nvim" }, 
+    -- -- for debugger
+    -- { "mfussenegger/nvim-dap" },
+    -- { "rcarriga/nvim-dap-ui",              dependencies = {
+    --     "mfussenegger/nvim-dap",
+    --     "nvim-neotest/nvim-nio",
+    -- } },
+    -- 
+    -- require 'plugins/config/harpoon',
+    -- require 'plugins/config/debugger',
+    --
+    -- {
+    --     'sainnhe/gruvbox-material',
+    --     priority = 1000, -- Make sure to load this before all the other start plugins.
+    --     config = function()
+    --         vim.cmd.colorscheme('gruvbox-material')
+    --     end
+    -- },
+}, {
+    rocks = {
+        hererocks = false,
+        enabled = false,
+    },
 })

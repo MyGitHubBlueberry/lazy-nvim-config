@@ -1,41 +1,38 @@
-local signs = {
-    { name = "DiagnosticSignError", text = "" },
-    { name = "DiagnosticSignWarn", text = "" },
-    { name = "DiagnosticSignHint", text = "" },
-    { name = "DiagnosticSignInfo", text = "" },
-}
-
-local diagnosti_config = {
-    virtual_text = true, -- was true
+local diagnostic_opts = {
+    underline = {
+        severity = {
+            vim.diagnostic.severity.ERROR,
+            vim.diagnostic.severity.WARN,
+        }
+    },
+    virtual_text = {
+        severity = {
+            vim.diagnostic.severity.HINT,
+            vim.diagnostic.severity.INFO,
+        },
+        spacing = 4,
+    },
+    virtual_lines = {
+        severity = {
+            vim.diagnostic.severity.ERROR,
+            vim.diagnostic.severity.WARN,
+        },
+        current_line = true,
+    },
     signs = {
-        active = signs,
+        text = {
+            [vim.diagnostic.severity.ERROR] = '',
+            [vim.diagnostic.severity.WARN] = '',
+            [vim.diagnostic.severity.HINT] = '',
+            [vim.diagnostic.severity.INFO] = '',
+        },
     },
-    -- underline = true,
-    -- severity_sort = true,
+    update_in_insert = false,
     float = {
-        focusable = true,
-        -- style = "minimal",
-        source = "always",
-        -- header = "",
-        -- prefix = "",
-        border = "single",
+        scope = 'cursor',
+        border = 'single',
     },
+    severity_sort = true,
 }
 
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-  vim.lsp.handlers.hover, {
-    border = "single"
-  }
-)
-
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
-  vim.lsp.handlers.signature_help, {
-    border = "single"
-  }
-)
-
-vim.diagnostic.config(diagnosti_config)
-
-for _, sign in ipairs(signs) do
-    vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
-end
+vim.diagnostic.config(diagnostic_opts)

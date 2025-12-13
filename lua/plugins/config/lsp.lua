@@ -2,9 +2,6 @@ return {
     {
         'neovim/nvim-lspconfig',
         dependencies = {
-            'williamboman/mason.nvim',
-            'williamboman/mason-lspconfig.nvim',
-            'WhoIsSethDaniel/mason-tool-installer.nvim',
             { 'j-hui/fidget.nvim', opts = {} },
             { 'folke/neodev.nvim', opts = {} },
         },
@@ -44,7 +41,6 @@ return {
                     settings = {
                         Lua = {
                             diagnostics = {
-                                -- Get the language server to recognize the `vim` global
                                 globals = { "vim" },
                             },
                             completion = {

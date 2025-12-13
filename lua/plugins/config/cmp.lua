@@ -39,6 +39,7 @@ return {
             -- See `:help cmp`
             local cmp = require 'cmp'
             local luasnip = require 'luasnip'
+            local remap = require 'config.remap'
 
             cmp.setup {
                 snippet = {
@@ -47,7 +48,7 @@ return {
                     end,
                 },
                 completion = { completeopt = 'menu,menuone,noinsert,noselect' },
-                mapping = cmp.mapping.preset.insert(require('config.remap').map_cmp()),
+                mapping = cmp.mapping.preset.insert(remap.map_cmp()),
                 sources = cmp.config.sources({
                     { name = 'nvim_lsp' },
                     { name = 'luasnip' },
@@ -57,15 +58,14 @@ return {
                     { name = 'buffer' },
                 }),
                 window = {
-                    completion = { -- single border; thin-style scrollbar
-                        border = 'single',
-                        scrollbar = false, --'║',
-                        winhighlight = "Normal:FloatBorder,CursorLine:PmenuSel,Search:None",
-                    },
-                    documentation = { -- single border; native-style scrollbar
+                    completion = {
                         border = 'single',
                         scrollbar = false,
-                        -- other options
+                        winhighlight = "Normal:FloatBorder,CursorLine:PmenuSel,Search:None",
+                    },
+                    documentation = {
+                        border = 'single',
+                        scrollbar = false,
                     },
                 },
                 formatting = {

@@ -15,12 +15,11 @@ local function map(mode, lhs, rhs, desc, opts)
     vim.keymap.set(mode, lhs, rhs, options);
 end
 
--- toggles file tree
 map(n_v, "<leader>e", function()
     if vim.api.nvim_buf_get_option(0, "filetype") == "netrw" then
-        vim.api.nvim_exec(":bd", false); -- opens previous buffer
+        vim.cmd("b#");
     else
-        vim.api.nvim_exec(":Ex", false); -- opens explorer
+        vim.cmd("Ex"); -- opens explorer
     end
 end, "Toggle [E]xplorer")
 
@@ -32,7 +31,6 @@ map(v, "K", ":m '<-2<CR>gv=gv", "Move selected line of code up and indent")
 map(n, "J", "<C-d>zz", "Go half-page [D]own and center on cursor")
 map(n, "K", "<C-u>zz", "Go half-page [U]p and ceter on cursor")
 
--- cursor in the center when use n or N in search mode
 map(n, "n", "nzzzv", "Go to [n]ext in search")
 map(n, "N", "Nzzzv", "Go to [N]ext (previous) in search")
 
@@ -42,18 +40,40 @@ map(n_v, "<leader>y", [["+y]], "[y]ank to clipboard register")
 map(n_v, "<leader>Y", [["+Y]], "[Y]ank to clipboard register")
 map(n_v, "<leader>d", [["_d]], "[D]elete in blank register")
 
---diagnostic mappings
-map(n, '[d', vim.diagnostic.goto_prev, 'Go to previous [D]iagnostic message')
-map(n, ']d', vim.diagnostic.goto_next, 'Go to next [D]iagnostic message')
-map(n, '<leader>q', vim.diagnostic.setqflist, 'Open [Q]uick Fix List') -- :copen; add :cclose to togle
-map(n, 'gl', vim.diagnostic.open_float, '[G]o to f[L]oat window')
---
-map(n, '<C-k>', function() vim.api.nvim_exec(":cprev", false) end, 'Open prev item in fix list')
-map(n, '<C-j>', function() vim.api.nvim_exec(":cnext", false) end, 'Open next item in fix list')
---
+map("n", "<leader>q", function()
+    local qf_winid = vim.fn.getqflist({ winid = 0 }).winid
+
+    if qf_winid == 0 then
+        vim.diagnostic.setqflist()
+    else
+        vim.cmd("cclose")
+    end
+end, "Toggle [Q]uick Fix List")
+
+map("n", "<C-j>", function()
+    local qf = vim.fn.getqflist({ idx = 0, size = 0 })
+    if qf.size == 0 then return end
+
+    if qf.idx == qf.size then
+        vim.cmd("cfirst")
+    else
+        vim.cmd("cnext")
+    end
+end, "Cycle Next QF Item")
+map("n", "<C-k>", function()
+    local qf = vim.fn.getqflist({ idx = 0, size = 0 })
+    if qf.size == 0 then return end -- Safety: Do nothing if list is empty
+
+    if qf.idx == 1 then
+        vim.cmd("clast") -- If at the start, cycle to the bottom
+    else
+        vim.cmd("cprev")
+    end
+end, "Cycle Prev QF Item")
+
 M.map_telescope = function()
     local builtin = require 'telescope.builtin'
-    vim.keymap.set('n', '<leader>H', builtin.help_tags, { desc = 'Find [H]elp' })
+    vim.keymap.set('n', '<leader>h', builtin.help_tags, { desc = 'Find [H]elp' })
     vim.keymap.set('n', '<leader>k', builtin.keymaps, { desc = 'Find [K]eymaps' })
     vim.keymap.set('n', '<leader>f', builtin.find_files, { desc = 'Find [F]iles' })
     vim.keymap.set('n', '<leader>g', builtin.live_grep, { desc = 'Find by [G]rep' })
@@ -74,7 +94,7 @@ M.map_lsp = function(event)
     loc_map('<leader>r', vim.lsp.buf.rename, '[R]ename')
     loc_map('<leader>F', vim.lsp.buf.format, '[F]ormat current buffer')
     loc_map('<leader>a', vim.lsp.buf.code_action, 'Code [A]ction')
-    -- loc_map('gt', builtin.lsp_type_definitions, '[G]o to [T]ype definition')
+    loc_map('gt', builtin.lsp_type_definitions, '[G]o to [T]ype definition')
     loc_map('gi', builtin.lsp_implementations, '[G]o to [I]mplementation')
     loc_map('gd', builtin.lsp_definitions, '[G]oto [D]efinition') -- <C-t> to go back
     loc_map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -92,7 +112,7 @@ M.map_lsp = function(event)
 end
 
 M.map_debugger = function()
-    local dap = require'dap'
+    local dap = require 'dap'
     local loc_map = function(keys, func, desc)
         vim.keymap.set(n_v, keys, func, { desc = 'Debugger: ' .. desc })
     end
@@ -102,21 +122,22 @@ M.map_debugger = function()
     loc_map("<leader>do", function() dap.step_over() end, "Step [o]ver")
     loc_map("<leader>dO", function() dap.step_out() end, "Step [O]ut")
     loc_map("<leader>di", function() dap.step_into() end, "Step [i]nto")
-    loc_map("<leader>dm", function() dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end, "Set a break point with [m]essage")
+    loc_map("<leader>dm", function() dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end,
+        "Set a break point with [m]essage")
     loc_map("<leader>dr", function() dap.repl.open() end, "Open [r]epl")
     loc_map("<Leader>dh", function()
-      require("dap.ui.widgets").hover()
+        require("dap.ui.widgets").hover()
     end, "[h]over")
     loc_map("<Leader>dp", function()
-      require("dap.ui.widgets").preview()
+        require("dap.ui.widgets").preview()
     end, "[p]review")
     loc_map("<Leader>df", function()
-      local widgets = require("dap.ui.widgets")
-      widgets.centered_float(widgets.frames)
+        local widgets = require("dap.ui.widgets")
+        widgets.centered_float(widgets.frames)
     end, "Something to do with [f]rames")
     loc_map("<Leader>ds", function()
-      local widgets = require("dap.ui.widgets")
-      widgets.centered_float(widgets.scopes)
+        local widgets = require("dap.ui.widgets")
+        widgets.centered_float(widgets.scopes)
     end, "Something to do with [s]copes")
 end
 
