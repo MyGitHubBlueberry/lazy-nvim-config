@@ -3,18 +3,56 @@ return {
         'neovim/nvim-lspconfig',
         dependencies = {
             { 'j-hui/fidget.nvim', opts = {} },
-            { 'folke/neodev.nvim', opts = {} },
+            {
+                "folke/lazydev.nvim",
+                ft = "lua", -- only load on lua files
+                opts = {
+                    library = {
+                        -- See the configuration section for more details
+                        -- Load luvit types when the `vim.uv` word is found
+                        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+                    },
+                },
+            },
         },
         config = function()
+            local lspconfig = require('lspconfig')
+            vim.lsp.config('*', {
+                capabilities = vim.tbl_deep_extend(
+                    "force",
+                    vim.lsp.protocol.make_client_capabilities(),
+                    require('cmp_nvim_lsp').default_capabilities()
+                )
+            })
+
+            local servers = {
+                clangd = {},
+                rust_analyzer = {},
+                pyright = {},
+                lua_ls = {
+                    settings = {
+                        Lua = {
+                            diagnostics = {
+                                globals = { "vim" },
+                            },
+                        },
+                    },
+                },
+                bashls = {},
+                csharp_ls = { cmd = { "csharp-ls" } },
+                sqls = {}
+            }
+
+            for name, conf in pairs(servers) do
+                vim.lsp.config(name, conf)
+            end
+
+            vim.lsp.enable(vim.tbl_keys(servers))
+
             vim.api.nvim_create_autocmd('LspAttach', {
                 group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
                 callback = function(event)
                     require('config.remap').map_lsp(event)
-                    -- The following two autocommands are used to highlight references of the
-                    -- word under your cursor when your cursor rests there for a little while.
-                    --    See `:help CursorHold` for information about when this is executed
-                    --
-                    -- When you move your cursor, the highlights will be cleared (the second autocommand).
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
                     if client and client.server_capabilities.documentHighlightProvider then
                         vim.api.nvim_create_autocmd({ 'CursorHold' }, {
@@ -28,41 +66,7 @@ return {
                         })
                     end
                 end,
-            })
-
-            local capabilities = vim.lsp.protocol.make_client_capabilities()
-            capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
-
-            local servers = {
-                clangd = {},
-                rust_analyzer = {},
-                pyright = {},
-                lua_ls = {
-                    settings = {
-                        Lua = {
-                            diagnostics = {
-                                globals = { "vim" },
-                            },
-                            completion = {
-                                callSnippet = 'Replace',
-                            },
-                        },
-                    },
-                },
-                bashls = {},
-                -- ts_ls = {},
-                csharp_ls = {},
-                sqls = {}
-            }
-
-            for i, _ in pairs(servers) do
-                local server = servers[i] or {}
-                server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-                require('lspconfig')[i].setup(server)
-            end
-
-            -- require('mason').setup()
-            -- require('mason-nvim-dap').setup()
+            });
         end,
     },
 }

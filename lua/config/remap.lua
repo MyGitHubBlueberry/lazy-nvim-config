@@ -1,7 +1,6 @@
 local M = {}
 
 vim.g.leader = " "
-
 local n_v = { "n", "v" };
 local n = "n";
 local v = "v";
@@ -16,7 +15,7 @@ local function map(mode, lhs, rhs, desc, opts)
 end
 
 map(n_v, "<leader>e", function()
-    if vim.api.nvim_buf_get_option(0, "filetype") == "netrw" then
+    if vim.bo.filetype == "netrw" then
         vim.cmd("b#");
     else
         vim.cmd("Ex"); -- opens explorer
@@ -94,7 +93,7 @@ M.map_lsp = function(event)
     loc_map('<leader>r', vim.lsp.buf.rename, '[R]ename')
     loc_map('<leader>F', vim.lsp.buf.format, '[F]ormat current buffer')
     loc_map('<leader>a', vim.lsp.buf.code_action, 'Code [A]ction')
-    loc_map('gt', builtin.lsp_type_definitions, '[G]o to [T]ype definition')
+    loc_map('gs', builtin.lsp_type_definitions, '[G]o to [T]ype definition')
     loc_map('gi', builtin.lsp_implementations, '[G]o to [I]mplementation')
     loc_map('gd', builtin.lsp_definitions, '[G]oto [D]efinition') -- <C-t> to go back
     loc_map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
