@@ -16,6 +16,7 @@ return {
             },
         },
         config = function()
+            ---@diagnostic disable-next-line: unused-local
             local lspconfig = require('lspconfig')
             vim.lsp.config('*', {
                 capabilities = vim.tbl_deep_extend(
@@ -40,7 +41,8 @@ return {
                 },
                 bashls = {},
                 csharp_ls = { cmd = { "csharp-ls" } },
-                sqls = {}
+                sqls = {},
+                nixd = {},
             }
 
             for name, conf in pairs(servers) do
