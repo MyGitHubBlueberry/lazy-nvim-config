@@ -29,7 +29,7 @@ local diagnostic_opts = {
     },
     update_in_insert = false,
     float = {
-        scope = 'cursor',
+        scope = 'line',
         border = 'single',
     },
     severity_sort = true,

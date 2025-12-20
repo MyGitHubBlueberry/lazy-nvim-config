@@ -88,112 +88,131 @@ M.map_lsp = function(event)
         vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
     end
     local builtin = require('telescope.builtin')
-
-    loc_map('H', vim.lsp.buf.hover, '[H]over Documentation')
-    loc_map('<leader>r', vim.lsp.buf.rename, '[R]ename')
-    loc_map('<leader>F', vim.lsp.buf.format, '[F]ormat current buffer')
-    loc_map('<leader>a', vim.lsp.buf.code_action, 'Code [A]ction')
-    loc_map('gs', builtin.lsp_type_definitions, '[G]o to [T]ype definition')
-    loc_map('gi', builtin.lsp_implementations, '[G]o to [I]mplementation')
-    loc_map('gd', builtin.lsp_definitions, '[G]oto [D]efinition') -- <C-t> to go back
-    loc_map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-    loc_map('gr', builtin.lsp_references, '[G]oto [R]eferences')
-    vim.keymap.set({ 'i', 'n' }, '<C-Space>', vim.lsp.buf.signature_help,
+    loc_map('gl', vim.diagnostic.open_float, '[G]o to f[L]oat window')
+    loc_map('[d', function () vim.diagnostic.jump({count=1, float=true}) end, 'Go to previous [D]iagnostic message')
+    loc_map(']d', function () vim.diagnostic.jump({count=-1, float=true}) end, 'Go to next [D]iagnostic message')
+    map({ 'n', 'i'}, '<C-h>', function ()
+        local method = 'textDocument/signatureHelp'
+        local clients = vim.lsp.get_clients({ bufnr = 0 })
+        if #clients == 0 then return end
+        local encoding = clients[1].offset_encoding
+        local windowOpts = { border = 'single' };
+        vim.lsp.buf_request(
+            0,
+            method,
+            vim.lsp.util.make_position_params(0, encoding),
+            function(_, result, _, _)
+                if result and result.signatures and #result.signatures > 0 then
+                    vim.lsp.buf.signature_help(windowOpts)
+                else
+                    vim.lsp.buf.hover(windowOpts)
+                end
+            end)
+        end, 'LSP: Get signature help or hover', { buffer = event.buf, silent = true })
+        loc_map('<leader>r', vim.lsp.buf.rename, '[R]ename')
+        loc_map('<leader>F', vim.lsp.buf.format, '[F]ormat current buffer')
+        loc_map('<leader>a', vim.lsp.buf.code_action, 'Code [A]ction')
+        loc_map('gs', builtin.lsp_type_definitions, '[G]o to [T]ype definition')
+        loc_map('gi', builtin.lsp_implementations, '[G]o to [I]mplementation')
+        loc_map('gd', builtin.lsp_definitions, '[G]oto [D]efinition') -- <C-t> to go back
+        loc_map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+        loc_map('gr', builtin.lsp_references, '[G]oto [R]eferences')
+        vim.keymap.set({ 'i', 'n' }, '<C-Space>', vim.lsp.buf.signature_help,
         { buffer = event.buf, desc = 'LSP: ' .. 'Open Signature' })
 
-    -- Fuzzy find all the symbols in your current document.
-    --  Symbols are things like variables, functions, types, etc.
-    loc_map('<leader>s', builtin.lsp_document_symbols, 'Find Document [s]ymbols')
+        -- Fuzzy find all the symbols in your current document.
+        --  Symbols are things like variables, functions, types, etc.
+        loc_map('<leader>s', builtin.lsp_document_symbols, 'Find Document [s]ymbols')
 
-    -- Fuzzy find all the symbols in your current workspace.
-    --  Similar to document symbols, except searches over your entire project.
-    loc_map('<leader>S', builtin.lsp_dynamic_workspace_symbols, 'Find Workspace [S]ymbols')
-end
-
-M.map_debugger = function()
-    local dap = require 'dap'
-    local loc_map = function(keys, func, desc)
-        vim.keymap.set(n_v, keys, func, { desc = 'Debugger: ' .. desc })
+        -- Fuzzy find all the symbols in your current workspace.
+        --  Similar to document symbols, except searches over your entire project.
+        loc_map('<leader>S', builtin.lsp_dynamic_workspace_symbols, 'Find Workspace [S]ymbols')
     end
 
-    loc_map("<leader>dt", function() dap.toggle_breakpoint() end, "[t]oggle break point")
-    loc_map("<leader>dc", function() dap.continue() end, "Start or [c]ontinue")
-    loc_map("<leader>do", function() dap.step_over() end, "Step [o]ver")
-    loc_map("<leader>dO", function() dap.step_out() end, "Step [O]ut")
-    loc_map("<leader>di", function() dap.step_into() end, "Step [i]nto")
-    loc_map("<leader>dm", function() dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end,
+    M.map_debugger = function()
+        local dap = require 'dap'
+        local loc_map = function(keys, func, desc)
+            vim.keymap.set(n_v, keys, func, { desc = 'Debugger: ' .. desc })
+        end
+
+        loc_map("<leader>dt", function() dap.toggle_breakpoint() end, "[t]oggle break point")
+        loc_map("<leader>dc", function() dap.continue() end, "Start or [c]ontinue")
+        loc_map("<leader>do", function() dap.step_over() end, "Step [o]ver")
+        loc_map("<leader>dO", function() dap.step_out() end, "Step [O]ut")
+        loc_map("<leader>di", function() dap.step_into() end, "Step [i]nto")
+        loc_map("<leader>dm", function() dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end,
         "Set a break point with [m]essage")
-    loc_map("<leader>dr", function() dap.repl.open() end, "Open [r]epl")
-    loc_map("<Leader>dh", function()
-        require("dap.ui.widgets").hover()
-    end, "[h]over")
-    loc_map("<Leader>dp", function()
-        require("dap.ui.widgets").preview()
-    end, "[p]review")
-    loc_map("<Leader>df", function()
-        local widgets = require("dap.ui.widgets")
-        widgets.centered_float(widgets.frames)
-    end, "Something to do with [f]rames")
-    loc_map("<Leader>ds", function()
-        local widgets = require("dap.ui.widgets")
-        widgets.centered_float(widgets.scopes)
-    end, "Something to do with [s]copes")
-end
+        loc_map("<leader>dr", function() dap.repl.open() end, "Open [r]epl")
+        loc_map("<Leader>dh", function()
+            require("dap.ui.widgets").hover()
+        end, "[h]over")
+        loc_map("<Leader>dp", function()
+            require("dap.ui.widgets").preview()
+        end, "[p]review")
+        loc_map("<Leader>df", function()
+            local widgets = require("dap.ui.widgets")
+            widgets.centered_float(widgets.frames)
+        end, "Something to do with [f]rames")
+        loc_map("<Leader>ds", function()
+            local widgets = require("dap.ui.widgets")
+            widgets.centered_float(widgets.scopes)
+        end, "Something to do with [s]copes")
+    end
 
-M.map_cmp = function()
-    local cmp = require 'cmp'
-    local luasnip = require 'luasnip'
-    return {
-        ['<Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-                cmp.select_next_item()
-            elseif luasnip.expand_or_jumpable() then
-                luasnip.expand_or_jump()
-            else
-                fallback()
-            end
-        end, { 'i', 'c' }),
+    M.map_cmp = function()
+        local cmp = require 'cmp'
+        local luasnip = require 'luasnip'
+        return {
+            ['<Tab>'] = cmp.mapping(function(fallback)
+                if cmp.visible() then
+                    cmp.select_next_item()
+                elseif luasnip.expand_or_jumpable() then
+                    luasnip.expand_or_jump()
+                else
+                    fallback()
+                end
+            end, { 'i', 'c' }),
 
-        ['<S-Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-                cmp.select_prev_item()
-            elseif luasnip.jumpable(-1) then
-                luasnip.jump(-1)
-            else
-                fallback()
-            end
-        end, { 'i', 'c' }),
+            ['<S-Tab>'] = cmp.mapping(function(fallback)
+                if cmp.visible() then
+                    cmp.select_prev_item()
+                elseif luasnip.jumpable(-1) then
+                    luasnip.jump(-1)
+                else
+                    fallback()
+                end
+            end, { 'i', 'c' }),
 
-        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+            ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+            ['<C-f>'] = cmp.mapping.scroll_docs(4),
 
-        ['<CR>'] = cmp.mapping.confirm {
-            behavior = cmp.ConfirmBehavior.Insert,
-            select = false
-        },
-        ['<C-space>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-                cmp.mapping.close()(fallback)
-            else
-                cmp.mapping.complete()(fallback)
-            end
-        end, { "i", "c" }),
-    }
-end
+            ['<CR>'] = cmp.mapping.confirm {
+                behavior = cmp.ConfirmBehavior.Insert,
+                select = false
+            },
+            ['<C-space>'] = cmp.mapping(function(fallback)
+                if cmp.visible() then
+                    cmp.mapping.close()(fallback)
+                else
+                    cmp.mapping.complete()(fallback)
+                end
+            end, { "i", "c" }),
+        }
+    end
 
-M.map_harpoon = function()
-    local mark = require("harpoon.mark")
-    local ui = require("harpoon.ui")
+    M.map_harpoon = function()
+        local mark = require("harpoon.mark")
+        local ui = require("harpoon.ui")
 
-    map(n, "<leader>x", mark.add_file, "Add file to harpoon")
-    map(n, "<leader>h", ui.toggle_quick_menu, "Toggle [H]arpoon menu")
+        map(n, "<leader>x", mark.add_file, "Add file to harpoon")
+        map(n, "<leader>h", ui.toggle_quick_menu, "Toggle [H]arpoon menu")
 
-    map(n, "<leader>1", function() ui.nav_file(1) end, "Harpoon [1]st file")
-    map(n, "<leader>2", function() ui.nav_file(2) end, "Harpoon [2]st file")
-    map(n, "<leader>3", function() ui.nav_file(3) end, "Harpoon [3]st file")
-    map(n, "<leader>4", function() ui.nav_file(4) end, "Harpoon [4]st file")
-end
+        map(n, "<leader>1", function() ui.nav_file(1) end, "Harpoon [1]st file")
+        map(n, "<leader>2", function() ui.nav_file(2) end, "Harpoon [2]st file")
+        map(n, "<leader>3", function() ui.nav_file(3) end, "Harpoon [3]st file")
+        map(n, "<leader>4", function() ui.nav_file(4) end, "Harpoon [4]st file")
+    end
 
-map(n, "<leader>u", vim.cmd.UndotreeToggle, "Toggle undo tree")
+    map(n, "<leader>u", vim.cmd.UndotreeToggle, "Toggle undo tree")
 
-return M
+    return M
