@@ -14,7 +14,7 @@ vim.opt.incsearch = true
 vim.opt.colorcolumn = "80"
 vim.opt.termguicolors = false
 
-vim.opt.wrap = false
+vim.opt.wrap = true
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 

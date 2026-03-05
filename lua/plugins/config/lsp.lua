@@ -54,8 +54,23 @@ return {
                     },
                 },
                 bashls = {},
-                -- ts_ls = {},
-                csharp_ls ={},
+                csharp_ls = {},
+                html = {
+                    settings = {
+                        html = {
+                            format = { enable = true },
+                            validate = true, -- enable error highlighting
+                        }
+                    }
+                },
+                eslint = {},
+                cssls = {},
+                emmet_ls = {
+                    filetypes = { "css", "html", "javascriptreact", "less", "sass", "scss", "typescriptreact" },
+                },
+                wgsl_analyzer = {
+                    cmd = { 'wgsl-analyzer' }
+                },
             }
 
             for i, _ in pairs(servers) do
@@ -63,9 +78,6 @@ return {
                 server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
                 require('lspconfig')[i].setup(server)
             end
-
-            -- require('mason').setup()
-            -- require('mason-nvim-dap').setup()
         end,
     },
 }
