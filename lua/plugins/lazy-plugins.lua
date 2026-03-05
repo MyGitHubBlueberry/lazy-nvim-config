@@ -59,7 +59,7 @@ require('lazy').setup({
     require 'plugins/config/treesitter',
     {
         'deviantfero/wpgtk.vim',
-        priority = 1000,         -- Make sure to load this before all the other start plugins.
+        priority = 1000, -- Make sure to load this before all the other start plugins.
         config = function()
             vim.cmd.colorscheme('wpgtk')
         end
@@ -69,6 +69,15 @@ require('lazy').setup({
     --for yuck like in eww
     'gpanders/nvim-parinfer',
     'elkowar/yuck.vim',
+    {
+        'brianhuster/live-preview.nvim',
+        dependencies = {
+            'nvim-telescope/telescope.nvim',
+        },
+        config = function()
+            require('livepreview.config').set()
+        end
+    }
     -- { 'neodev.nvim' },
     -- -- for non declarative systems
     -- { "williamboman/mason.nvim" },
