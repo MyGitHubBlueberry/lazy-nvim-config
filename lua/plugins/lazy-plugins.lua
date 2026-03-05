@@ -66,8 +66,9 @@ require('lazy').setup({
     },
     'mbbill/undotree',
     'tpope/vim-fugitive',
-    -- --for yuck like in eww
-    -- { 'gpanders/nvim-parinfer' },
+    --for yuck like in eww
+    'gpanders/nvim-parinfer',
+    'elkowar/yuck.vim',
     -- { 'neodev.nvim' },
     -- -- for non declarative systems
     -- { "williamboman/mason.nvim" },

@@ -91,6 +91,7 @@ M.map_lsp = function(event)
     loc_map('gl', vim.diagnostic.open_float, '[G]o to f[L]oat window')
     loc_map('[d', function () vim.diagnostic.jump({count=1, float=true}) end, 'Go to previous [D]iagnostic message')
     loc_map(']d', function () vim.diagnostic.jump({count=-1, float=true}) end, 'Go to next [D]iagnostic message')
+    loc_map('H', vim.lsp.buf.hover, '[H]over')
     map({ 'n', 'i'}, '<C-h>', function ()
         local method = 'textDocument/signatureHelp'
         local clients = vim.lsp.get_clients({ bufnr = 0 })
