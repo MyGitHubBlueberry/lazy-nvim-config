@@ -1,4 +1,6 @@
 local M = {}
+vim.opt.mouse = ""
+
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
@@ -25,11 +27,11 @@ vim.g.mapleader = " "
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
-vim.opt.cursorline = true
+vim.opt.cursorline = false
 -- vim.opt.timeoutlen for which key popup (500 is too low)
 vim.api.nvim_create_autocmd('TextYankPost', {
     desc = 'Highlight when yanking (copying) text',
-    group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+    group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
     callback = function()
         vim.highlight.on_yank()
     end,
