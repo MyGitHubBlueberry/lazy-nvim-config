@@ -43,6 +43,22 @@ return {
                 csharp_ls = { cmd = { "csharp-ls" } },
                 sqls = {},
                 nixd = {},
+                html = {
+                    settings = {
+                        html = {
+                            format = { enable = true },
+                            validate = true, -- enable error highlighting
+                        }
+                    }
+                },
+                eslint = {},
+                cssls = {},
+                emmet_ls = {
+                    filetypes = { "css", "html", "javascriptreact", "less", "sass", "scss", "typescriptreact" },
+                },
+                wgsl_analyzer = {
+                    cmd = { 'wgsl-analyzer' }
+                },
             }
 
             for name, conf in pairs(servers) do
@@ -68,7 +84,7 @@ return {
                         })
                     end
                 end,
-            });
+            })
         end,
     },
 }
