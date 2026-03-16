@@ -59,6 +59,7 @@ return {
                 wgsl_analyzer = {
                     cmd = { 'wgsl-analyzer' }
                 },
+                ts_ls = {},
             }
 
             for name, conf in pairs(servers) do
