@@ -26,6 +26,12 @@ return {
                 )
             })
 
+            vim.filetype.add({
+                extension = {
+                    ejs = "ejs",
+                },
+            })
+
             local servers = {
                 clangd = {},
                 rust_analyzer = {},
@@ -44,6 +50,7 @@ return {
                 sqls = {},
                 nixd = {},
                 html = {
+                    filetypes = { 'html', 'ejs' },
                     settings = {
                         html = {
                             format = { enable = true },
@@ -54,7 +61,7 @@ return {
                 eslint = {},
                 cssls = {},
                 emmet_ls = {
-                    filetypes = { "css", "html", "javascriptreact", "less", "sass", "scss", "typescriptreact" },
+                    filetypes = { "css", "html", "ejs", "javascriptreact", "less", "sass", "scss", "typescriptreact" },
                 },
                 wgsl_analyzer = {
                     cmd = { 'wgsl-analyzer' }

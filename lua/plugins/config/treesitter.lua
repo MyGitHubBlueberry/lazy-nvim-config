@@ -17,6 +17,7 @@ return {
         config = function(_, opts)
             require('nvim-treesitter.configs').setup(opts)
             require('config/set').enable_folding()
+            vim.treesitter.language.register("html", "ejs")
         end,
     },
 }

@@ -64,6 +64,7 @@ require('lazy').setup({
             vim.cmd.colorscheme('wpgtk')
         end
     },
+    'OXY2DEV/markview.nvim',
     'mbbill/undotree',
     'tpope/vim-fugitive',
     --for yuck like in eww

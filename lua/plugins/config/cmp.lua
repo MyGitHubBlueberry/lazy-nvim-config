@@ -23,6 +23,7 @@ return {
                         config = function()
                             require('luasnip.loaders.from_vscode').lazy_load()
                             require('luasnip').filetype_extend("cs", { "unity" }) --Unity snippets
+                            require('luasnip').filetype_extend("ejs", { "html" }) -- html snippets in ejs
                         end,
                     },
                 },
